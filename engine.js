@@ -86,7 +86,7 @@
             var Dxk = tb.D[x + k], Dxn = tb.D[x + n];
             var Mxk = tb.M[x + k], Mxn = tb.M[x + n];
             var Nxk = tb.N[x + k], Nxn = tb.N[x + n], Nxt = tb.N[x + t];
-            if (Dxk === 0) { rv.push({ year: k, reserve: 0, surrender: 0 }); continue; }
+            if (Dxk === 0) { rv.push({ year: k, reserve: 0, surrender: 0, reduced_sa: 0 }); continue; }
             var Axk = (Mxk - Mxn + Dxn) / Dxk;
             var ank = (Nxk - Nxn) / Dxk;
             var atk = (k < t) ? (Nxk - Nxt) / Dxk : 0;
@@ -96,7 +96,8 @@
             var res = rr * SA;
             var sur = Math.max(sr * SA, 0);
             if (k === n) sur = SA;
-            rv.push({ year: k, reserve: Math.round(res), surrender: Math.round(sur) });
+            var reduced_sa = (Axk > 0) ? Math.round(sur) / Axk : 0;
+            rv.push({ year: k, reserve: Math.round(res), surrender: Math.round(sur), reduced_sa: Math.round(reduced_sa) });
         }
         return rv;
     }

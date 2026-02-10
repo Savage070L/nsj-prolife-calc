@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор НСЖ — Pro Life Fit</title>
+    <title>Калькулятор НСЖ — Saqtau Senim</title>
     <style>
         :root {
             --bg: #E4E9F2;
@@ -42,7 +42,7 @@
         /* ===== HEADER ===== */
         .header {
             background: var(--surface);
-            padding: 18px 32px;
+            padding: 14px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -60,10 +60,10 @@
             align-items: center;
             box-shadow: var(--shadow-out-sm);
         }
-        .logo-pill img { height: 36px; width: auto; display: block; }
+        .logo-pill img { height: 32px; width: auto; display: block; }
         .header-right { text-align: right; }
         .header-right h1 {
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             letter-spacing: -0.02em;
             background: linear-gradient(135deg, var(--accent), var(--accent-purple));
@@ -80,9 +80,9 @@
         /* ===== MAIN CONTAINER ===== */
         .container {
             display: grid;
-            grid-template-columns: 500px 1fr;
-            gap: 20px;
-            padding: 20px;
+            grid-template-columns: 480px 1fr;
+            gap: 16px;
+            padding: 12px 16px;
             max-width: 1600px;
             margin: 0 auto;
             align-items: start;
@@ -91,67 +91,82 @@
         .panel-left {
             background: var(--surface);
             border-radius: var(--radius);
-            padding: 20px;
+            padding: 14px 16px;
             box-shadow: var(--shadow-out);
             overflow-y: auto;
-            max-height: calc(100vh - 120px);
+            max-height: calc(100vh - 90px);
             position: sticky;
-            top: 20px;
+            top: 12px;
         }
 
         .form-row {
             display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 12px;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
         }
 
         .section-title {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
             color: var(--text-light);
-            margin-bottom: 12px;
-            padding-bottom: 6px;
+            margin-bottom: 8px;
+            padding-bottom: 4px;
             border-bottom: 2px solid rgba(163,177,198,0.2);
         }
 
-        .form-group { margin-bottom: 14px; }
+        .form-group { margin-bottom: 10px; }
         .form-group label {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             color: var(--text-main);
-            margin-bottom: 5px;
-        }
-        .form-group input[type="date"],
-        .form-group select {
-            width: 100%;
-            padding: 10px 14px;
-            border: none;
-            border-radius: var(--radius-xs);
-            font-size: 14px;
-            background: var(--surface);
-            box-shadow: var(--shadow-in);
-            color: var(--text-main);
-            transition: box-shadow 0.2s;
-            outline: none;
-        }
-        .form-group input[type="date"]:focus,
-        .form-group select:focus {
-            box-shadow: var(--shadow-in), 0 0 0 2px rgba(67,97,238,0.25);
+            margin-bottom: 4px;
         }
 
-        .radio-group { display: flex; gap: 8px; margin-top: 4px; }
+        /* ===== NEUMORPHIC FORM CONTROLS ===== */
+        .neu-input {
+            width: 100%;
+            padding: 9px 12px;
+            border: none;
+            border-radius: var(--radius-xs);
+            font-size: 13px;
+            background: var(--surface);
+            box-shadow: var(--shadow-btn);
+            color: var(--text-main);
+            transition: all 0.25s ease;
+            outline: none;
+            cursor: pointer;
+            font-weight: 600;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+        .neu-input:focus, .neu-input:active {
+            box-shadow: var(--shadow-btn-press);
+        }
+        .neu-input:hover {
+            transform: translateY(-1px);
+            box-shadow: 5px 5px 10px rgba(163,177,198,0.55), -5px -5px 10px rgba(255,255,255,0.9);
+        }
+        select.neu-input {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238494a7' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 28px;
+        }
+
+        .radio-group { display: flex; gap: 6px; margin-top: 4px; }
         .radio-pill { flex: 1; position: relative; }
         .radio-pill input { display: none; }
         .radio-pill label {
             display: block;
             text-align: center;
-            padding: 9px 12px;
+            padding: 8px 10px;
             border-radius: var(--radius-xs);
             cursor: pointer;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             background: var(--surface);
             box-shadow: var(--shadow-btn);
@@ -168,10 +183,10 @@
         .mode-toggle {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 14px;
+            gap: 6px;
+            margin-bottom: 10px;
         }
-        .mode-toggle .radio-pill label { font-size: 12px; padding: 10px 8px; }
+        .mode-toggle .radio-pill label { font-size: 11px; padding: 9px 6px; }
 
         .stepper {
             display: flex;
@@ -181,12 +196,12 @@
             overflow: hidden;
         }
         .stepper .btn-step {
-            width: 36px;
-            height: 38px;
+            width: 34px;
+            height: 36px;
             border: none;
             background: var(--surface);
             color: var(--text-main);
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -204,7 +219,7 @@
         .stepper input {
             flex: 1;
             min-width: 0;
-            padding: 8px 6px;
+            padding: 7px 6px;
             border: none;
             background: var(--surface);
             box-shadow: var(--shadow-in);
@@ -213,19 +228,20 @@
             font-family: 'SF Mono', 'Menlo', monospace;
             color: var(--text-main);
             outline: none;
+            font-weight: 600;
         }
         .stepper input:focus { box-shadow: var(--shadow-in), 0 0 0 2px rgba(67,97,238,0.2); }
 
         /* Riders */
-        .riders-section { margin-top: 12px; }
+        .riders-section { margin-top: 8px; }
         .rider-group-label {
             font-size: 10px;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.8px;
             color: var(--accent);
-            margin: 14px 0 8px 0;
-            padding-bottom: 4px;
+            margin: 10px 0 6px 0;
+            padding-bottom: 3px;
             border-bottom: 1px solid rgba(67,97,238,0.15);
         }
         .rider-group-label:first-child { margin-top: 0; }
@@ -233,21 +249,21 @@
         .rider-radio-group {
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            margin-bottom: 6px;
+            gap: 3px;
+            margin-bottom: 4px;
         }
         .rider-radio-row {
             display: flex;
             align-items: center;
-            gap: 8px;
-            padding: 6px 10px;
+            gap: 6px;
+            padding: 5px 8px;
             border-radius: var(--radius-xs);
             cursor: pointer;
             transition: background 0.2s;
         }
         .rider-radio-row:hover { background: rgba(163,177,198,0.1); }
         .rider-radio-row input[type="radio"] {
-            width: 16px; height: 16px;
+            width: 14px; height: 14px;
             accent-color: var(--accent);
             cursor: pointer;
             flex-shrink: 0;
@@ -259,10 +275,10 @@
             flex: 1;
         }
         .rider-radio-row .rider-sa-tag {
-            font-size: 9px;
+            font-size: 8px;
             color: var(--accent);
             background: rgba(67,97,238,0.08);
-            padding: 2px 8px;
+            padding: 1px 6px;
             border-radius: 6px;
             font-weight: 600;
             white-space: nowrap;
@@ -270,15 +286,15 @@
 
         .rider-check-row {
             display: grid;
-            grid-template-columns: 24px 1fr 140px;
-            gap: 8px;
+            grid-template-columns: 22px 1fr 130px;
+            gap: 6px;
             align-items: center;
-            padding: 7px 0;
+            padding: 5px 0;
             border-bottom: 1px solid rgba(163,177,198,0.15);
         }
         .rider-check-row:last-child { border-bottom: none; }
         .rider-check-row input[type="checkbox"] {
-            width: 18px; height: 18px;
+            width: 16px; height: 16px;
             accent-color: var(--accent);
             cursor: pointer;
         }
@@ -289,32 +305,45 @@
         }
         .rider-check-row select {
             width: 100%;
-            padding: 7px 10px;
+            padding: 6px 8px;
             border: none;
             border-radius: 8px;
-            font-size: 12px;
+            font-size: 11px;
             background: var(--surface);
-            box-shadow: var(--shadow-in);
+            box-shadow: var(--shadow-btn);
             color: var(--text-main);
             outline: none;
             cursor: pointer;
             font-family: 'SF Mono', 'Menlo', monospace;
+            font-weight: 600;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%238494a7' stroke-width='2.5'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            padding-right: 24px;
+            transition: all 0.2s ease;
+        }
+        .rider-check-row select:hover {
+            transform: translateY(-1px);
+            box-shadow: 5px 5px 10px rgba(163,177,198,0.55), -5px -5px 10px rgba(255,255,255,0.9);
         }
         .rider-check-row select:focus {
-            box-shadow: var(--shadow-in), 0 0 0 2px rgba(67,97,238,0.25);
+            box-shadow: var(--shadow-btn-press);
         }
 
         .btn-calculate {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: linear-gradient(135deg, var(--accent) 0%, var(--accent-purple) 100%);
             color: white;
             border: none;
             border-radius: var(--radius-sm);
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            margin-top: 18px;
+            margin-top: 12px;
             transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
             box-shadow: 4px 4px 10px rgba(67,97,238,0.35), -2px -2px 6px rgba(255,255,255,0.5);
             letter-spacing: 0.5px;
@@ -362,8 +391,6 @@
         .result-card:nth-child(2) { animation-delay: 0.08s; }
         .result-card:nth-child(3) { animation-delay: 0.16s; }
         .result-card:nth-child(4) { animation-delay: 0.24s; }
-        .result-card:nth-child(5) { animation-delay: 0.32s; }
-        .result-card:nth-child(6) { animation-delay: 0.40s; }
 
         @keyframes fadeInCard {
             from { opacity: 0; transform: translateY(20px); }
@@ -415,9 +442,6 @@
             box-shadow: var(--shadow-in);
         }
         .highlight-val { color: var(--accent); font-size: 13px; }
-
-        .side-by-side { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-        .comm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
 
         .data-table {
             width: 100%;
@@ -594,9 +618,8 @@
         ::-webkit-scrollbar-thumb:hover { background: rgba(163,177,198,0.7); }
 
         @media (max-width: 1024px) {
-            .container { grid-template-columns: 1fr; }
+            .container { grid-template-columns: 1fr; padding: 10px; }
             .panel-left { max-height: none; position: static; }
-            .side-by-side { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -610,7 +633,7 @@
     </div>
     <div class="header-right">
         <h1>Калькулятор НСЖ</h1>
-        <div class="subtitle">Pro Life Fit</div>
+        <div class="subtitle">Saqtau Senim</div>
     </div>
 </div>
 
@@ -621,7 +644,7 @@
 
         <div class="form-group">
             <label>Дата рождения</label>
-            <input type="date" id="dob" value="1990-05-15">
+            <input type="date" id="dob" value="1990-05-15" class="neu-input">
         </div>
 
         <div class="form-group">
@@ -649,7 +672,7 @@
             </div>
             <div class="form-group">
                 <label>Периодичность</label>
-                <select id="frequency">
+                <select id="frequency" class="neu-input">
                     <option value="annual" selected>Годовой</option>
                     <option value="semiannual">Полугодовой</option>
                     <option value="quarterly">Квартальный</option>
@@ -659,21 +682,21 @@
             </div>
         </div>
 
-        <div class="section-title" style="margin-top: 16px;">Режим расчёта</div>
+        <div class="section-title" style="margin-top: 10px;">Режим расчёта</div>
 
         <div class="mode-toggle">
             <div class="radio-pill">
                 <input type="radio" name="mode" id="mode_sa" value="sa_to_premium" checked>
-                <label for="mode_sa">СС → Премия</label>
+                <label for="mode_sa">Страх. Сумма → Премия</label>
             </div>
             <div class="radio-pill">
                 <input type="radio" name="mode" id="mode_pr" value="premium_to_sa">
-                <label for="mode_pr">Премия → СС</label>
+                <label for="mode_pr">Премия → Страх. Сумма</label>
             </div>
         </div>
 
         <div class="form-group" id="sa_group">
-            <label>Страховая сумма (СС)</label>
+            <label>Страховая сумма</label>
             <div class="stepper">
                 <div class="btn-step minus" data-target="sum_assured" data-step="-1000000">−</div>
                 <input type="text" id="sum_assured" value="1 000 000" inputmode="numeric" class="fmt-number">
@@ -690,7 +713,7 @@
             </div>
         </div>
 
-        <div class="section-title" style="margin-top: 16px;">Дополнительные покрытия</div>
+        <div class="section-title" style="margin-top: 10px;">Дополнительные покрытия</div>
 
         <div class="riders-section">
             <!-- ===== Group 1: Смерть (radio, pick one) ===== -->
@@ -699,12 +722,12 @@
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g1" id="rg1_ad" value="accidental_death">
                     <span class="rider-name">Смерть от НС</span>
-                    <span class="rider-sa-tag">сумма = СС</span>
+                    <span class="rider-sa-tag">сумма = страховой сумме</span>
                 </label>
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g1" id="rg1_td" value="traffic_death">
                     <span class="rider-name">Смерть в ДТП</span>
-                    <span class="rider-sa-tag">сумма = СС</span>
+                    <span class="rider-sa-tag">сумма = страховой сумме</span>
                 </label>
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g1" id="rg1_none" value="" checked>
@@ -718,17 +741,17 @@
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g2" id="rg2_pw" value="premium_waiver">
                     <span class="rider-name">Освоб. от уплаты взносов (НС)</span>
-                    <span class="rider-sa-tag">сумма = СС</span>
+                    <span class="rider-sa-tag">сумма = страховой сумме</span>
                 </label>
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g2" id="rg2_dany" value="disability_any_lumpsum">
                     <span class="rider-name">Единовр. выплата 100% (ЛП)</span>
-                    <span class="rider-sa-tag">сумма = СС</span>
+                    <span class="rider-sa-tag">сумма = страховой сумме</span>
                 </label>
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g2" id="rg2_dal" value="disability_accident_lumpsum">
                     <span class="rider-name">Единовр. выплата 100% (НС)</span>
-                    <span class="rider-sa-tag">сумма = СС</span>
+                    <span class="rider-sa-tag">сумма = страховой сумме</span>
                 </label>
                 <label class="rider-radio-row">
                     <input type="radio" name="rider_g2" id="rg2_none" value="" checked>
@@ -762,30 +785,33 @@
                 <input type="checkbox" id="r_td2">
                 <span class="rider-name">Временная утрата труд. от НС</span>
                 <select id="r_td2_sum">
-                    <option value="500000" selected>500 000</option>
-                    <option value="1000000">1 000 000</option>
-                    <option value="1500000">1 500 000</option>
+                    <option value="1000000" selected>1 000 000</option>
                     <option value="2000000">2 000 000</option>
+                    <option value="3000000">3 000 000</option>
+                    <option value="4000000">4 000 000</option>
+                    <option value="5000000">5 000 000</option>
                 </select>
             </div>
             <div class="rider-check-row">
                 <input type="checkbox" id="r_hosp">
                 <span class="rider-name">Госпитализация от НС</span>
                 <select id="r_hosp_sum">
-                    <option value="500000" selected>500 000</option>
-                    <option value="1000000">1 000 000</option>
-                    <option value="1500000">1 500 000</option>
+                    <option value="1000000" selected>1 000 000</option>
                     <option value="2000000">2 000 000</option>
+                    <option value="3000000">3 000 000</option>
+                    <option value="4000000">4 000 000</option>
+                    <option value="5000000">5 000 000</option>
                 </select>
             </div>
             <div class="rider-check-row">
                 <input type="checkbox" id="r_ci">
                 <span class="rider-name">Критические заболевания</span>
                 <select id="r_ci_sum">
-                    <option value="500000">500 000</option>
                     <option value="1000000" selected>1 000 000</option>
-                    <option value="1500000">1 500 000</option>
                     <option value="2000000">2 000 000</option>
+                    <option value="3000000">3 000 000</option>
+                    <option value="4000000">4 000 000</option>
+                    <option value="5000000">5 000 000</option>
                 </select>
             </div>
         </div>
@@ -842,11 +868,6 @@ function fmtPct(n) {
     return (Number(n) * 100).toFixed(2) + '%';
 }
 
-function fmtComm(n) {
-    if (n === undefined || n === null) return '—';
-    return Number(n).toFixed(4);
-}
-
 var RIDER_LABELS = {
     'accidental_death': 'Смерть от НС',
     'traffic_death': 'Смерть в ДТП',
@@ -885,13 +906,6 @@ function getRiderPremium(r) {
 
 function getRiderSum(r) {
     return r.rider_sum || r.ci_sum || 0;
-}
-
-function getRiderTariff(r) {
-    if (r.gross_tariff) return fmtRate(r.gross_tariff, 4);
-    if (r.BP_ci) return fmtRate(r.BP_ci, 4);
-    if (r.j6_tariff) return fmtRate(r.j6_tariff, 4);
-    return '—';
 }
 
 function buildTotalRiders(d) {
@@ -1041,27 +1055,7 @@ function renderError(msg, tb, validation) {
 function renderResults(d) {
     var panel = document.getElementById('results');
 
-    // Riders table
-    var ridersRows = '';
-    if (d.riders && Object.keys(d.riders).length > 0) {
-        var saLinked = d.sa_linked_riders || [];
-        for (var key in d.riders) {
-            var r = d.riders[key];
-            var label = RIDER_LABELS[key] || key;
-            var tariff = getRiderTariff(r);
-            var rsum = getRiderSum(r);
-            var prem = getRiderPremium(r);
-            var isSA = saLinked.indexOf(key) !== -1;
-            ridersRows += '<tr>' +
-                '<td style="text-align:left">' + label + (isSA ? ' <span style="color:var(--accent);font-size:9px;">(=СС)</span>' : '') + '</td>' +
-                '<td>' + tariff + '</td>' +
-                '<td>' + (typeof rsum === 'number' && rsum > 0 ? fmtS(rsum) : '—') + '</td>' +
-                '<td><strong>' + fmtS(prem) + '</strong></td>' +
-                '</tr>';
-        }
-    }
-
-    // Reserves table
+    // Reserves table with reduced SA (УСС)
     var reservesRows = '';
     if (d.reserves) {
         d.reserves.forEach(function(r) {
@@ -1070,12 +1064,13 @@ function renderResults(d) {
                 '<td>' + (d.age + r.year) + '</td>' +
                 '<td>' + fmtS(r.reserve) + '</td>' +
                 '<td>' + fmtS(r.surrender) + '</td>' +
+                '<td>' + fmtS(r.reduced_sa) + '</td>' +
                 '</tr>';
         });
     }
 
     panel.innerHTML =
-        // Main results
+        // Main results (cleaned up — removed NP rate, freq coefficient, BP rate, net premium)
         '<div class="result-card">' +
             '<h3><span class="icon">📋</span> Основные показатели</h3>' +
             '<div class="kv-grid">' +
@@ -1084,52 +1079,11 @@ function renderResults(d) {
                 '<div class="kv-row"><span class="kv-key">Срок оплаты</span><span class="kv-val">' + d.payment_term + ' лет</span></div>' +
                 '<div class="kv-row"><span class="kv-key">Ставка доходности</span><span class="kv-val">' + fmtPct(d.interest_rate) + '</span></div>' +
                 '<div class="kv-row"><span class="kv-key">Периодичность</span><span class="kv-val">' + (FREQ_LABELS[d.frequency] || d.frequency) + '</span></div>' +
-                '<div class="kv-row"><span class="kv-key">Коэфф. периодичности</span><span class="kv-val">' + fmtRate(d.freq_factor, 4) + '</span></div>' +
                 '<div class="kv-row highlight-row"><span class="kv-key"><strong>Страховая сумма</strong></span><span class="kv-val highlight-val animate-count" data-target="' + Math.round(d.sum_assured) + '">' + fmtInt(d.sum_assured) + '</span></div>' +
-                '<div class="kv-row highlight-row"><span class="kv-key"><strong>Ставка брутто-премии</strong></span><span class="kv-val highlight-val">' + fmtRate(d.BP_rate, 6) + '</span></div>' +
-                '<div class="kv-row"><span class="kv-key">Ставка нетто-премии</span><span class="kv-val">' + fmtRate(d.NP_rate, 6) + '</span></div>' +
                 '<div class="kv-row highlight-row"><span class="kv-key"><strong>Годовая премия</strong></span><span class="kv-val highlight-val animate-count" data-target="' + Math.round(d.annual_premium) + '">' + fmtInt(d.annual_premium) + '</span></div>' +
                 '<div class="kv-row highlight-row"><span class="kv-key"><strong>Премия (' + (FREQ_LABELS[d.frequency] || d.frequency) + ')</strong></span><span class="kv-val highlight-val animate-count" data-target="' + Math.round(d.gross_premium) + '">' + fmtInt(d.gross_premium) + '</span></div>' +
-                '<div class="kv-row"><span class="kv-key">Нетто-премия (абс.)</span><span class="kv-val">' + fmt(d.net_premium) + '</span></div>' +
             '</div>' +
         '</div>' +
-
-        // Actuarial + Commutation side by side
-        '<div class="side-by-side">' +
-            '<div class="result-card">' +
-                '<h3><span class="icon">🔢</span> Актуарные величины</h3>' +
-                '<div class="kv-grid" style="grid-template-columns:1fr;">' +
-                    '<div class="kv-row"><span class="kv-key">Страхование жизни (Ax:n)</span><span class="kv-val">' + fmtRate(d.Ax_n, 6) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Аннуитет полный (ax:n)</span><span class="kv-val">' + fmtRate(d.ax_n, 6) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Аннуитет оплаты (ax:t)</span><span class="kv-val">' + fmtRate(d.ax_t, 6) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Расходы 1-й год</span><span class="kv-val">' + fmtRate(d.G2, 4) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Расходы 2-й год</span><span class="kv-val">' + fmtRate(d.G3, 4) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Расходы от премий</span><span class="kv-val">' + fmtRate(d.G6, 4) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">Расходы от страх. суммы</span><span class="kv-val">' + fmtRate(d.G7, 4) + '</span></div>' +
-                '</div>' +
-            '</div>' +
-            '<div class="result-card">' +
-                '<h3><span class="icon">📐</span> Коммутационные числа</h3>' +
-                '<div class="kv-grid comm-grid">' +
-                    '<div class="kv-row"><span class="kv-key">D(x)</span><span class="kv-val">' + fmtComm(d.Dx) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">D(x+1)</span><span class="kv-val">' + fmtComm(d.Dx1) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">D(x+n)</span><span class="kv-val">' + fmtComm(d.Dxn) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">M(x)</span><span class="kv-val">' + fmtComm(d.Mx) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">M(x+n)</span><span class="kv-val">' + fmtComm(d.Mxn) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">N(x)</span><span class="kv-val">' + fmtComm(d.Nx) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">N(x+n)</span><span class="kv-val">' + fmtComm(d.Nxn) + '</span></div>' +
-                    '<div class="kv-row"><span class="kv-key">N(x+t)</span><span class="kv-val">' + fmtComm(d.Nxt) + '</span></div>' +
-                '</div>' +
-            '</div>' +
-        '</div>' +
-
-        // Riders
-        (ridersRows ? '<div class="result-card">' +
-            '<h3><span class="icon">🛡️</span> Дополнительные покрытия</h3>' +
-            '<table class="data-table"><thead><tr>' +
-                '<th>Покрытие</th><th>Тариф</th><th>Сумма</th><th>Премия</th>' +
-            '</tr></thead><tbody>' + ridersRows + '</tbody></table>' +
-        '</div>' : '') +
 
         // Total
         '<div class="total-block" id="total-block">' +
@@ -1144,11 +1098,11 @@ function renderResults(d) {
             '</div>' +
         '</div>' +
 
-        // Reserves
+        // Reserves with Reduced SA (УСС)
         (reservesRows ? '<div class="result-card">' +
             '<h3><span class="icon">📊</span> Таблица резервов и выкупных сумм</h3>' +
             '<div style="overflow-x: auto;"><table class="data-table"><thead><tr>' +
-                '<th>Год</th><th>Возраст</th><th>Резерв</th><th>Выкупная</th>' +
+                '<th>Год</th><th>Возраст</th><th>Резерв</th><th>Выкупная</th><th>УСС</th>' +
             '</tr></thead><tbody>' + reservesRows + '</tbody></table></div>' +
         '</div>' : '');
 
