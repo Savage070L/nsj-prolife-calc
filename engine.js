@@ -217,47 +217,130 @@
         var SA, ap, gp;
 
         if (md === 'premium_to_sa') {
-            /* === Premium -> SA (iterative) === */
+            /* === Premium -> SA (3-phase solver, matches Python calculator) === */
             var total_pm_input = parseFloat(p.premium);
 
             /* Step 1: fixed rider premiums (don't depend on SS) */
-            var fixed_total = 0;
+            var fixed_total = 0, fixed_total_nr = 0;
             for (var fi = 0; fi < fixed_r.length; fi++) {
                 var fk = fixed_r[fi][0], fs = fixed_r[fi][1];
                 var fp = _rp1(fk, fs, x, n, t, gn, fr, ff, sg, 0, qx, qci_raw, ge);
                 fixed_total += fp;
+                fixed_total_nr += fp; /* riders_calc already rounds internally */
             }
 
-            /* Step 2: initial SS guess */
-            var remaining = total_pm_input - fixed_total;
-            if (sg) SA = (BP > 0) ? remaining / BP : 0;
-            else SA = (BP > 0) ? remaining / (BP * ff) : 0;
-
-            /* Step 3: iterate */
-            for (var it = 0; it < 100; it++) {
-                var apm_iter = Math.round(BP * SA);
-                var sa_total = 0;
+            /* Rounded total premium (matches Excel cells) */
+            function _tp_round(sa_try) {
+                var mp;
+                if (sg) mp = Math.round(BP * sa_try);
+                else mp = Math.round(BP * sa_try * ff);
+                var apm = BP * sa_try;
+                var sal_total = 0;
                 for (var si = 0; si < sa_linked.length; si++) {
-                    var sk = sa_linked[si];
-                    var rp_iter = _rp1(sk, SA, x, n, t, gn, fr, ff, sg, apm_iter, qx, qci_raw, ge);
-                    sa_total += rp_iter;
+                    sal_total += _rp1(sa_linked[si], sa_try, x, n, t, gn, fr, ff, sg, apm, qx, qci_raw, ge);
                 }
-                remaining = total_pm_input - fixed_total - sa_total;
-                if (remaining <= 0) remaining = 0;
-                var new_sa;
-                if (sg) new_sa = (BP > 0) ? remaining / BP : 0;
-                else new_sa = (BP > 0) ? remaining / (BP * ff) : 0;
-                if (Math.abs(new_sa - SA) < 1) { SA = new_sa; break; }
-                SA = new_sa;
+                return mp + sal_total + fixed_total;
             }
-            SA = Math.round(SA);
-            ap = Math.round(BP * SA);
-            gp = sg ? ap : Math.round(BP * SA * ff);
+
+            /* Semi-smooth total premium (for binary search) */
+            /* Main: NO ROUND. SA-linked simple: WITH ROUND. PW: NO per-step ROUND. */
+            function _tp_smooth(sa_try) {
+                var mp = sg ? BP * sa_try : BP * sa_try * ff; /* NO ROUND */
+                var apm = BP * sa_try;
+                var sal_total = 0;
+                for (var si = 0; si < sa_linked.length; si++) {
+                    var rk = sa_linked[si];
+                    if (rk === 'premium_waiver') {
+                        if (sg) continue;
+                        var pw_rc = _rd.disability_accident_lumpsum;
+                        var pw_j6 = Math.round((pw_rc.t * (1 + pw_rc.e) / (1 - pw_rc.q)) * 10000) / 10000;
+                        var pw_sum = 0;
+                        for (var pk = 0; pk < n - 1; pk++) {
+                            pw_sum += (n - 1 - pk) * apm * pw_j6; /* NO ROUND per step */
+                        }
+                        if (n > 1) sal_total += pw_sum / (n - 1) * ff;
+                    } else if (rk === 'critical_illness') {
+                        var ci_r = _p3(qx, qci_raw, _h0, x, n, t, ge, ff, sa_try, sg);
+                        sal_total += ci_r.premium;
+                    } else {
+                        var sr = _p2(rk, sa_try, n, ff, sg);
+                        if (sr) sal_total += sr.rider_premium;
+                    }
+                }
+                return mp + sal_total + fixed_total_nr;
+            }
+
+            /* Phase 1: Binary search on semi-smooth function (300 iterations) */
+            var sa_upper;
+            if (sg) sa_upper = (BP > 0) ? total_pm_input / BP * 2 : 0;
+            else sa_upper = (BP > 0) ? total_pm_input / (BP * ff) * 2 : 0;
+            var sa_lower = 0;
+
+            if (sa_upper > 0) {
+                while (_tp_smooth(sa_upper) < total_pm_input) {
+                    sa_upper *= 2;
+                    if (sa_upper > 1e15) break;
+                }
+            }
+
+            for (var it = 0; it < 300; it++) {
+                var sa_mid = (sa_lower + sa_upper) / 2.0;
+                if (_tp_smooth(sa_mid) < total_pm_input) sa_lower = sa_mid;
+                else sa_upper = sa_mid;
+                if (sa_upper - sa_lower < 1e-6) break;
+            }
+            var sa_smooth = (sa_lower + sa_upper) / 2.0;
+
+            /* Phase 2: Continuous analytical solution */
+            var has_pw = false;
+            for (var pi = 0; pi < sa_linked.length; pi++) {
+                if (sa_linked[pi] === 'premium_waiver' && !sg) { has_pw = true; break; }
+            }
+            var sa_tariff_sum = 0;
+            for (var ti = 0; ti < sa_linked.length; ti++) {
+                var trk = sa_linked[ti];
+                if (trk !== 'premium_waiver' && trk !== 'critical_illness') {
+                    var trc = _rd[trk];
+                    if (trc) sa_tariff_sum += Math.round((trc.t * (1 + trc.e) / (1 - trc.q)) * 10000) / 10000;
+                }
+            }
+            var sa_cont, total_rate;
+            if (has_pw) {
+                var pw_rc2 = _rd.disability_accident_lumpsum;
+                var pw_j6_2 = Math.round((pw_rc2.t * (1 + pw_rc2.e) / (1 - pw_rc2.q)) * 10000) / 10000;
+                var pw_mult = pw_j6_2 * n / 2.0;
+                total_rate = (BP * (1.0 + pw_mult) + sa_tariff_sum) * ff;
+            } else {
+                total_rate = (BP + sa_tariff_sum) * (sg ? 1.0 : ff);
+            }
+            sa_cont = (total_rate > 0) ? (total_pm_input - fixed_total) / total_rate : sa_smooth;
+
+            /* Phase 3: Refinement — test candidates, pick best |tp_round - target| */
+            var best_sa = sa_smooth;
+            var best_diff = Math.abs(_tp_round(sa_smooth) - total_pm_input);
+            var cands = [];
+            var off, delta;
+            var offsets = [-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5];
+            var deltas = [-0.5, -0.25, -0.1, -0.01, 0, 0.01, 0.1, 0.25, 0.5];
+            for (off = 0; off < offsets.length; off++) cands.push(Math.round(sa_smooth) + offsets[off]);
+            for (delta = 0; delta < deltas.length; delta++) cands.push(sa_smooth + deltas[delta]);
+            cands.push(sa_cont);
+            for (off = 0; off < offsets.length; off++) cands.push(Math.round(sa_cont) + offsets[off]);
+            for (delta = 0; delta < deltas.length; delta++) cands.push(sa_cont + deltas[delta]);
+            for (var ci2 = 0; ci2 < cands.length; ci2++) {
+                if (cands[ci2] <= 0) continue;
+                var td2 = Math.abs(_tp_round(cands[ci2]) - total_pm_input);
+                if (td2 < best_diff) { best_diff = td2; best_sa = cands[ci2]; }
+            }
+
+            SA = Math.round(best_sa * 100) / 100;
+            ap = BP * SA;
+            gp = sg ? Math.round(BP * SA) : Math.round(BP * SA * ff);
         } else {
             /* === SA -> Premium === */
             SA = parseFloat(p.sum_assured);
-            ap = Math.round(BP * SA);
-            gp = sg ? ap : Math.round(BP * SA * ff);
+            ap = BP * SA;
+            gp = sg ? Math.round(BP * SA) : Math.round(BP * SA * ff);
         }
 
         /* Reserves */
@@ -294,6 +377,7 @@
 
         var net_premium = NP * SA;
 
+        // Округляем ТОЛЬКО итоговые значения для отображения
         return {
             success: true,
             age: x,
@@ -306,15 +390,15 @@
             BP: Math.round(BP * 1000000) / 1000000,
             NP_rate: NP,
             BP_rate: BP,
-            annual_premium: ap,
-            gross_premium: gp,
-            net_premium: net_premium,
+            annual_premium: Math.round(ap),
+            gross_premium: Math.round(gp),
+            net_premium: Math.round(net_premium),
             interest_rate: i,
             freq_factor: ff,
             reserves: rv,
             riders: ri,
-            riders_total: rt,
-            total_premium: gp + rt,
+            riders_total: Math.round(rt),
+            total_premium: Math.round(gp + rt),
             sa_linked_riders: sa_linked,
             fixed_riders: fixed_r.map(function (f) { return f[0]; }),
             Ax_n: r.Ax,
